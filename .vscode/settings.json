@@ -1,0 +1,15 @@
+{
+    "editor.detectIndentation": false,
+    "go.toolsEnvVars": {
+        "CGO_ENABLED": "0"
+    },
+    "terminal.integrated.env.windows": {
+        "CGO_ENABLED": "0",
+        "PATH": "${workspaceFolder}\\node_modules\\.bin;${env:PATH}"
+    },
+    "terminal.integrated.env.linux": {
+        "CGO_ENABLED": "0",
+        "PATH": "${workspaceFolder}/node_modules/.bin:${env:PATH}"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib"
+}

@@ -1,0 +1,23 @@
+{
+    "terminal.integrated.shell.linux": "/usr/bin/fish",
+    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
+    "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.folders.theme": "specific",
+    "material-icon-theme.folders.color": "#90a4ae",
+    "material-icon-theme.folders.associations": {
+        "renderer": "react-components",
+        "internal": "components",
+        "vendor": "import",
+        ".config": "config",
+        "references": "docs",
+        ".webpack": "webpack"
+    },
+    "material-icon-theme.files.associations": {
+        "tsconfig.base.json": "typescript",        
+        "tsconfig.json": "typescript",
+        "webpack.analyzer.ts": "Webpack",
+        "webpack.analyzer.js": "Webpack",
+        "*.bson": "yaml"
+    },
+    "editor.fontFamily": "YaHei Consolas Hybrid"
+}

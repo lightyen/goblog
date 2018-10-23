@@ -1,0 +1,15 @@
+{
+    "extends": "../.config/tsconfig.base",
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",  
+        "target": "es6",
+        "lib": ["es6", "dom"],
+    },
+    "include": [
+        "webpack.config.ts",
+        "webpack.dev.ts",
+        "webpack.prod.ts",
+        "webpack.analyzer.ts",
+    ]
+}

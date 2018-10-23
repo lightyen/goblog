@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": false,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "strictNullChecks": false,
+        "removeComments": true,
+        "noUnusedParameters": false,
+        "noUnusedLocals": false, 
+        "suppressImplicitAnyIndexErrors": true,
+        "allowJs": true,
+        "strict": true,  
+    },
+}

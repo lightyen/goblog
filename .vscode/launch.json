@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "delve",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "remotePath": "",
+            "port": 2345,
+            "host": "127.0.0.1",
+            "program": "${workspaceFolder}",
+            "args": [
+                "--debug",
+                "--public", "web",
+                // "--tls-crt", "cert/server.crt",
+                // "--tls-key", "cert/server.pem"
+            ],
+            "showLog": false,
+            "env": {
+                "CGO_ENABLED": "0"
+            }
+        }
+    ]
+}

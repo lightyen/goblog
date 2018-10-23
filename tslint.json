@@ -1,0 +1,31 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:latest", "tslint-react"
+    ],
+    "linterOptions": {
+        "exclude": [
+            "renderer/**/*.d.ts"
+        ]
+    },
+    "jsRules": {},
+    "rules": {
+        "object-literal-sort-keys": false,
+        "ordered-imports": false,
+        "interface-name": false,
+        "no-empty-interface": false,
+        "max-line-length": false,
+        "no-submodule-imports": false,
+        "no-empty": false,
+        "no-implicit-dependencies": [true, "dev", ["assets", "root", "com"]],
+        "no-console": false,
+        "no-var-requires": false,
+        "no-duplicate-imports": false,
+        "no-string-literal": false,
+        "jsx-boolean-value": false,
+        "jsx-no-bind": false,
+        "semicolon": [true, "never"],
+        "jsx-no-lambda": false
+    },
+    "rulesDirectory": []
+}

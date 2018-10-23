@@ -1,0 +1,23 @@
+{
+    "extends": "./.config/tsconfig.base",
+    "compilerOptions": {
+        "jsx": "react",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "target": "es6",
+        "lib": ["es6", "dom"],
+        "types": [
+        ],
+        "paths": {
+            "root/*": ["renderer/*"],
+            "assets/*": ["renderer/assets/*"],
+            "com/*": ["renderer/App/components/*"],
+        },
+        "baseUrl": "./"
+    },
+    "compileOnSave": false,
+    "exclude": [
+        "node_modules",
+        "web",
+    ]
+}

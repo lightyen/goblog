@@ -1,0 +1,10 @@
+.webpack/*.js
+renderer/App/**/*.d.ts
+node_modules/
+vendor/
+web/
+*.log
+debug
+goblog
+goblog.exe
+yarn.lock
