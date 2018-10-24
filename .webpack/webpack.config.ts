@@ -1,5 +1,6 @@
 import { Configuration, Entry } from "webpack"
-import { resolve, join } from "path"
+import * as path from "path"
+import * as fs from "fs"
 import { TsConfigPathsPlugin } from "awesome-typescript-loader"
 import * as EventHooksPlugin from "event-hooks-webpack-plugin"
 import * as shell from "shelljs"
@@ -18,8 +19,8 @@ const titles = {
     404: "Not Found",
 }
 
-const distPath = resolve(__dirname, "../web")
-const rendererPath = resolve(__dirname, "../renderer")
+const distPath = path.resolve(__dirname, "../web")
+const rendererPath = path.resolve(__dirname, "../renderer")
 
 const conf: Configuration = {
     entry,
@@ -59,7 +60,7 @@ const conf: Configuration = {
                     // },
                     // "babelCore": "@babel/core",
                 },
-                include: [resolve(__dirname, "../renderer")],
+                include: [path.resolve(__dirname, "../renderer")],
             },
             {
                 test: /\.(png|jp(e?)g|gif|svg)$/,
@@ -122,7 +123,8 @@ const conf: Configuration = {
     resolve: {
         alias: {
             // https://github.com/ant-design/ant-design/issues/12011
-            // "@ant-design/icons/lib/dist$": resolve(__dirname, "../renderer/icons.ts"),
+            // 引入icons造成打包過大問題：暫時辦法是自訂需要的icon, 但很多時候根本不知道總共有多少個 ...
+            // "@ant-design/icons/lib/dist$": path.resolve(__dirname, "../renderer/icons.ts"),
         },
         extensions: [".ts", ".tsx", ".js", ".jsx"],
         plugins: [
@@ -147,9 +149,11 @@ const conf: Configuration = {
             chunkFilename: "[id].[hash].css",
         }),
     ].concat(Object.keys(entry).map((name: string) => {
+        const exclude = Object.keys(entry).slice()
+        exclude.splice(Object.keys(entry).indexOf(name), 1)
         return new HtmlWebpackPlugin({
             filename: name + ".html",
-            chunks: [name],
+            excludeChunks: exclude,
             template: "./renderer/public/" + name + ".ejs",
             inject: "body",
             title: titles[name],

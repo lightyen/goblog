@@ -4,7 +4,7 @@ import axios, { AxiosResponse, AxiosError } from "axios"
 import intl from "react-intl-universal"
 import { locales, getLocale } from "root/i18n"
 
-import { Button, Input, Row, Col } from "antd"
+import { Button, Input, Row, Col, Layout } from "antd"
 import { Icon } from "antd"
 
 import * as style from "./index.scss"
@@ -55,7 +55,7 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
         const suffix = username ? <Icon type="close-circle" onClick={this.emitEmpty.bind(this)} /> : null
 
         const LoginPanel = (
-        <div>
+        <Layout className={style.loginPanel}>
             <Row style={divStyle}>
                 <Input
                     placeholder={intl.get("enterUsername")}
@@ -78,27 +78,19 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
             <Row style={divStyle}>
                 <Button className={style.hahaStyle} type="primary" block onClick={this.LoginClick.bind(this)}>{intl.get("login")}</Button>
             </Row>
-        </div>
+        </Layout>
         )
 
         return (
-        <div className={style.page}>
-            <Row className={style.head}>
-                <Col span={8} />
-                <Col span={8} />
-                <Col span={8} />
-            </Row>
-            <Row className={style.body} type="flex" justify="center" align="top">
-                <Col xs={{ span: 6 }}  sm={{span: 7}}  md={{span: 8}} lg={{ span: 9.5 }} />
-                <Col xs={{ span: 12 }} sm={{span: 10}} md={{span: 8}} lg={{ span: 5 }}>{LoginPanel}</Col>
-                <Col xs={{ span: 6 }}  sm={{span: 7}}  md={{span: 8}} lg={{ span: 9.5 }} />
-            </Row>
-            <Row className={style.foot}>
-                <Col span={8} />
-                <Col span={8} />
-                <Col span={8} />
-            </Row>
-        </div>
+        <Layout className={style.page}>
+            <Layout.Content>
+                <Row style={{height: "100%"}} type="flex" justify="center" align="middle">
+                    <Col xs={{ span: 6 }}  sm={{span: 7}}  md={{span: 8}} lg={{ span: 9.5 }} />
+                    <Col xs={{ span: 12 }} sm={{span: 10}} md={{span: 8}} lg={{ span: 5 }}>{LoginPanel}</Col>
+                    <Col xs={{ span: 6 }}  sm={{span: 7}}  md={{span: 8}} lg={{ span: 9.5 }} />
+                </Row>
+            </Layout.Content>
+        </Layout>
         )
     }
 
@@ -106,8 +98,12 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
         intl.init({ currentLocale: getLocale(), locales })
         .then(async () => {
             const token = localStorage.getItem("jwtToken")
-            const valid = await this.validateToken(token)
-            this.setState({...this.state, logined: valid, initDone: true})
+            if (token !== null) {
+                const valid = await this.validateToken(token)
+                this.setState({...this.state, logined: valid, initDone: true})
+            } else {
+                this.setState({...this.state, logined: false, initDone: true})
+            }
         })
     }
 

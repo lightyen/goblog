@@ -8,8 +8,32 @@ export default webpackMerge(baseWebpackConfig, {
     mode: "production",
     optimization: {
         minimize: true,
-        // splitChunks: {
-        //     chunks: "all",
-        // },
+        splitChunks: {
+            chunks: "all",
+            // minSize: 30000,
+            // minChunks: 1,
+            // maxAsyncRequests: 5,
+            // maxInitialRequests: 3,
+            // name: true,
+            // cacheGroups: {
+            //     "vendors": {
+            //         test: /[\\/]node_modules[\\/]/,
+            //         priority: -10,
+            //     },
+            //     "default": {
+            //         minChunks: 2,
+            //         priority: -20,
+            //         reuseExistingChunk: true,
+            //     },
+            //     "react-vendor": {
+            //         test: (module, chunks) => /react/.test(module.context),
+            //         priority: 5,
+            //     },
+            //     "antd-vendor": {
+            //         test: (module, chunks) => /antd/.test(module.context),
+            //         priority: 1,
+            //     },
+            // },
+        },
     },
 })

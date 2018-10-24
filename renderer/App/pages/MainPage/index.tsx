@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import { Icon } from "antd"
 import { version as antdVersion } from "antd"
-import { Layout, Menu } from "antd"
+import { Layout, Menu, Button, Row, Col } from "antd"
 import { ClickParam } from "antd/lib/menu"
 import Hello from "com/Hello"
-import Table from "com/MyTable"
+import { TestPage } from "../../pages"
 // import axios, { AxiosResponse, AxiosError } from "axios"
 import { Redirect, Switch, Route, Link } from "react-router-dom"
 
@@ -40,7 +40,7 @@ export default class extends Component<ComponentProps, ComponentState> {
         return (
             <Layout className={style.main}>
                 <Layout.Sider collapsed={this.state.collapsed} onCollapse={this.onCollapse.bind(this)} collapsible>
-                    <Menu theme="dark" mode="inline" onClick={this.onMenuClick.bind(this)}>
+                    <Menu theme={"dark"} mode={"inline"} onClick={this.onMenuClick.bind(this)}>
                         <Menu.Item key="1">
                             <Icon type="setting" spin />
                             <span>Option 1</span>
@@ -60,8 +60,12 @@ export default class extends Component<ComponentProps, ComponentState> {
                     </Menu>
                 </Layout.Sider>
                 <Layout>
-                    <Layout.Header className={style.header}>
-                        Helloworld
+                    <Layout.Header>
+                        <Row type="flex" justify="end" align="middle">
+                            <Col span={4}>
+                                <Button onClick={this.logout.bind(this)}><Icon type="logout"/></Button>
+                            </Col>
+                        </Row>
                     </Layout.Header>
                     <Layout.Content>{this.renderContent()}</Layout.Content>
                     <Layout.Footer className={style.footer}>
@@ -80,7 +84,7 @@ export default class extends Component<ComponentProps, ComponentState> {
     private renderContent(): JSX.Element {
         switch (this.state.activeMenu) {
             case "Table":
-                return <Table/>
+                return <TestPage/>
             case "Alex":
                 return <Hello/>
             default:
@@ -95,6 +99,7 @@ export default class extends Component<ComponentProps, ComponentState> {
     }
 
     private logout() {
+        localStorage.removeItem("jwtToken")
         this.setState({...this.state, redirectToLogin: true})
     }
 }
