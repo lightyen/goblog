@@ -15,7 +15,7 @@ const entry: Entry = {
 }
 
 const titles = {
-    app: "goblog",
+    index: "goblog",
     404: "Not Found",
 }
 
@@ -149,8 +149,9 @@ const conf: Configuration = {
         return new HtmlWebpackPlugin({
             filename: name + ".html",
             excludeChunks: exclude,
-            template: "./renderer/public/" + name + ".ejs",
+            template: path.join("renderer", "public", name + ".ejs"),
             inject: "body",
+            favicon: path.join("renderer", "assets", "images", "favicon.ico"),
             title: titles[name],
         })
     })),
