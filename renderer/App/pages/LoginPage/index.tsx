@@ -4,7 +4,7 @@ import axios, { AxiosResponse, AxiosError } from "axios"
 import intl from "react-intl-universal"
 import { locales, getLocale } from "root/i18n"
 
-import { Button, Input, Row, Col, Layout } from "antd"
+import { Button, Input, Row, Col, Layout, Form } from "antd"
 import { Icon } from "antd"
 
 import * as style from "./index.scss"
@@ -54,6 +54,33 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
         const { username, password } = this.state
         const suffix = username ? <Icon type="close-circle" onClick={this.emitEmpty.bind(this)} /> : null
 
+        const LoginForm = (
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+            <Form.Item>
+                <Input
+                    placeholder={intl.get("enterUsername")}
+                    prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+                    suffix={suffix}
+                    value={username}
+                    onChange={this.onChangeUserName.bind(this)}
+                    ref={(node: Input) => this.userNameInput = node}
+                />
+            </Form.Item>
+            <Form.Item>
+                <Input
+                    placeholder={intl.get("enterPassword")}
+                    prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+                    type="password"
+                    value={password}
+                    onChange={this.onChangePassword.bind(this)}
+                />
+            </Form.Item>
+            <Form.Item>
+                <Button className={style.hahaStyle} type="primary" htmlType={"submit"} block>{intl.get("login")}</Button>
+            </Form.Item>
+        </Form>
+        )
+
         const LoginPanel = (
         <Layout className={style.loginPanel}>
             <Row style={divStyle}>
@@ -86,7 +113,7 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
             <Layout.Content>
                 <Row style={{height: "100%"}} type="flex" justify="center" align="middle">
                     <Col xs={{ span: 6 }}  sm={{span: 7}}  md={{span: 8}} lg={{ span: 9.5 }} />
-                    <Col xs={{ span: 12 }} sm={{span: 10}} md={{span: 8}} lg={{ span: 5 }}>{LoginPanel}</Col>
+                    <Col xs={{ span: 12 }} sm={{span: 10}} md={{span: 8}} lg={{ span: 5 }}>{LoginForm}</Col>
                     <Col xs={{ span: 6 }}  sm={{span: 7}}  md={{span: 8}} lg={{ span: 9.5 }} />
                 </Row>
             </Layout.Content>
@@ -138,6 +165,25 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
         // .catch((err) => {
         //     console.error(err)
         // })
+    }
+
+    private handleSubmit(e: React.FormEvent<HTMLElement>) {
+        e.preventDefault()
+        const user = {
+            username: this.state.username,
+            password: this.state.password,
+        }
+        axios.post("/token/new", user)
+        .then((response: AxiosResponse<ResponseToken>) => {
+            if (response.status === 200) {
+                localStorage.setItem("jwtToken", response.data.token)
+                this.setState({...this.state, logined: true})
+            }
+        })
+        .catch((err) => {
+            const error = err as AxiosError
+            console.log(error.response.data)
+        })
     }
 
     private async validateToken(token: string): Promise<boolean> {

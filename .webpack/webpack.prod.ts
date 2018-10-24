@@ -1,5 +1,7 @@
 import * as webpackMerge from "webpack-merge"
 import baseWebpackConfig from "./webpack.config"
+import { ContextReplacementPlugin } from "webpack"
+import * as path from "path"
 
 export default webpackMerge(baseWebpackConfig, {
     performance: {
@@ -36,4 +38,15 @@ export default webpackMerge(baseWebpackConfig, {
             // },
         },
     },
+    resolve: {
+        alias: {
+            // https://github.com/ant-design/ant-design/issues/12011
+            // 引入icons造成打包過大問題：暫時辦法是自訂需要的icon,
+            // 但antd自己也有引用很多icon, 所以很多時候根本不知道總共有多少個要引入 ...
+            // "@ant-design/icons/lib/dist$": path.resolve(__dirname, "../renderer/icons.ts"),
+        },
+    },
+    plugins: [
+        new ContextReplacementPlugin(/moment[/\\]locale$/, /es|zh/),
+    ],
 })

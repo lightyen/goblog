@@ -26,49 +26,52 @@ const columns: Array<ColumnProps<DataType>> = [
     },
 ]
 
-const data: DataType[] = [
-    {
-        key: 1,
-        name: "🇹🇼  John Brown",
-        age: 32,
-        address: "New York No. 1 Lake Park",
-    }, {
-        key: 2,
-        name: "🇹🇼  Jim Green",
-        age: 42,
-        address: "London No. 1 Lake Park",
-    }, {
-        key: 3,
-        name: "🇹🇼  Joe Black",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-    }, {
-        key: 4,
-        name: "🇹🇼  Jim Red",
-        age: 32,
-        address: "London No. 2 Lake Park",
-    },
-]
-
-interface ComponentProp {
+interface ComponentProps {
 
 }
 
 interface ComponentState {
     loading: boolean
+    data: DataType[]
 }
 
-export default class extends Component<ComponentProp, ComponentState> {
-    constructor(prop: ComponentProp) {
+export default class extends Component<ComponentProps, ComponentState> {
+    constructor(prop: ComponentProps) {
         super(prop)
+
+        const data: DataType[] = [
+            {
+                key: 1,
+                name: "🇹🇼  John Brown",
+                age: 32,
+                address: "New York No. 1 Lake Park",
+            }, {
+                key: 2,
+                name: "🇹🇼  Jim Green",
+                age: 42,
+                address: "London No. 1 Lake Park",
+            }, {
+                key: 3,
+                name: "🇹🇼  Joe Black",
+                age: 32,
+                address: "Sidney No. 1 Lake Park",
+            }, {
+                key: 4,
+                name: "🇹🇼  Jim Red",
+                age: 32,
+                address: "London No. 2 Lake Park",
+            },
+        ]
+
         this.state = {
             loading: true,
+            data,
         }
     }
 
     public render() {
         return (
-            <Table {...this.state} columns={columns} dataSource={data}/>
+            <Table {...this.state} columns={columns} dataSource={this.state.data}/>
         )
     }
 
@@ -78,14 +81,15 @@ export default class extends Component<ComponentProp, ComponentState> {
     }
 
     private add() {
-        data.push(
-            {
-                key: 5,
-                name: "🇹🇼  Lightyen",
-                age: 28,
-                address: "London No. 2 Lake Park",
-            },
-        )
+
+        const document: DataType = {
+            key: 5,
+            name: "🇹🇼  Lightyen",
+            age: 28,
+            address: "London No. 2 Lake Park",
+        }
+        this.state.data.push(document)
+        this.setState({...this.state})
     }
 
     private finish() {

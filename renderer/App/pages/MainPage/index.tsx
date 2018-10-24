@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Icon } from "antd"
 import { version as antdVersion } from "antd"
-import { Layout, Menu, Button, Row, Col } from "antd"
+import { Layout, Menu, Button, Row, Col, notification } from "antd"
 import { ClickParam } from "antd/lib/menu"
 import Hello from "com/Hello"
 import { TestPage } from "../../pages"
@@ -9,6 +9,7 @@ import { TestPage } from "../../pages"
 import { Redirect, Switch, Route, Link } from "react-router-dom"
 
 import style from "./index.scss"
+import MyTable from "com/MyTable"
 
 interface ComponentProps {
 
@@ -32,7 +33,6 @@ export default class extends Component<ComponentProps, ComponentState> {
     }
 
     public render() {
-
         if (this.state.redirectToLogin) {
             return <Redirect to="/" />
         }
@@ -41,7 +41,7 @@ export default class extends Component<ComponentProps, ComponentState> {
             <Layout className={style.main}>
                 <Layout.Sider collapsed={this.state.collapsed} onCollapse={this.onCollapse.bind(this)} collapsible>
                     <Menu theme={"dark"} mode={"inline"} onClick={this.onMenuClick.bind(this)}>
-                        <Menu.Item key="1">
+                        <Menu.Item key="Test">
                             <Icon type="setting" spin />
                             <span>Option 1</span>
                         </Menu.Item>
@@ -76,6 +76,13 @@ export default class extends Component<ComponentProps, ComponentState> {
         )
     }
 
+    public componentDidMount() {
+        notification.config({placement: "bottomRight"})
+        setTimeout(() => {
+            notification.info({message: "hello world", description: "hello hello world world"})
+        }, 100)
+    }
+
     private onCollapse(collapsed: boolean) {
         console.log(collapsed)
         this.setState({...this.state, collapsed})
@@ -83,12 +90,14 @@ export default class extends Component<ComponentProps, ComponentState> {
 
     private renderContent(): JSX.Element {
         switch (this.state.activeMenu) {
-            case "Table":
+            case "Test":
                 return <TestPage/>
+            case "Table":
+                return <MyTable/>
             case "Alex":
                 return <Hello/>
             default:
-                return null
+                return <TestPage/>
         }
     }
 

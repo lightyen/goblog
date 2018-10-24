@@ -121,11 +121,6 @@ const conf: Configuration = {
         ],
     },
     resolve: {
-        alias: {
-            // https://github.com/ant-design/ant-design/issues/12011
-            // 引入icons造成打包過大問題：暫時辦法是自訂需要的icon, 但很多時候根本不知道總共有多少個 ...
-            // "@ant-design/icons/lib/dist$": path.resolve(__dirname, "../renderer/icons.ts"),
-        },
         extensions: [".ts", ".tsx", ".js", ".jsx"],
         plugins: [
             new TsConfigPathsPlugin({
