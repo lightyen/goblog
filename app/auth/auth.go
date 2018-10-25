@@ -6,6 +6,11 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
+// CookieName is Cookie Name
+const CookieName string = "jwtToken"
+
+const TimeoutSec int = 15
+
 // SecretKey for json-web-token
 const SecretKey string = "3whDNcB$b@XFDmDAcN74"
 
@@ -16,8 +21,8 @@ func GenerateToken() (string, error) {
 	claims := make(jwt.MapClaims)
 	claims["iss"] = "www.example.com"
 	claims["sub"] = "userid"
-	claims["iat"] = nowDate.Unix()                                      // RFC7519 Issued At
-	claims["exp"] = nowDate.Add(time.Duration(15) * time.Second).Unix() // RFC7519 Expiration Time
+	claims["iat"] = nowDate.Unix()                                              // RFC7519 Issued At
+	claims["exp"] = nowDate.Add(time.Duration(TimeoutSec) * time.Second).Unix() // RFC7519 Expiration Time
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
 

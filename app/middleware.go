@@ -46,8 +46,15 @@ func testAPIMiddleware() gin.HandlerFunc {
 
 func validateTokenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := strings.TrimPrefix(c.GetHeader("Authorization"), "Bearer ")
-		_, err := auth.ParseToken(tokenString)
+		// tokenString := strings.TrimPrefix(c.GetHeader("Authorization"), "Bearer ")
+		tokenString, err := c.Cookie(auth.CookieName)
+		if err != nil {
+			c.Abort()
+			c.JSON(http.StatusUnauthorized, &gin.H{"message": fmt.Sprintf("%s", err)})
+			return
+		}
+
+		_, err = auth.ParseToken(tokenString)
 		if err != nil {
 			c.Abort()
 			c.JSON(http.StatusUnauthorized, &gin.H{"message": fmt.Sprintf("%s", err)})

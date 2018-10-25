@@ -5,7 +5,7 @@ import { Layout, Menu, Button, Row, Col, notification } from "antd"
 import { ClickParam } from "antd/lib/menu"
 import Hello from "com/Hello"
 import { TestPage } from "../../pages"
-// import axios, { AxiosResponse, AxiosError } from "axios"
+import axios, { AxiosResponse, AxiosError } from "axios"
 import { Redirect, Switch, Route, Link } from "react-router-dom"
 
 import style from "./index.scss"
@@ -84,7 +84,6 @@ export default class extends Component<ComponentProps, ComponentState> {
     }
 
     private onCollapse(collapsed: boolean) {
-        console.log(collapsed)
         this.setState({...this.state, collapsed})
     }
 
@@ -108,7 +107,18 @@ export default class extends Component<ComponentProps, ComponentState> {
     }
 
     private logout() {
-        localStorage.removeItem("jwtToken")
-        this.setState({...this.state, redirectToLogin: true})
+        interface Response {
+            result: boolean
+        }
+        axios.get<Response>("/token/remove")
+        .then((res) => {
+            if (res.data.result) {
+                this.setState({...this.state, redirectToLogin: true})
+            }
+        })
+        .catch((err) => {
+            const error = err as AxiosError
+            console.log(error.response.data)
+        })
     }
 }

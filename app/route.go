@@ -59,7 +59,8 @@ func (a *App) setGroupAPIRoutes(middlewares ...gin.HandlerFunc) {
 
 	a.addRoutes("/token", middlewares, []route{
 		{"POST", "/new", a.NewToken},
-		{"POST", "/test", a.TestToken},
+		{"GET", "/test", a.TestToken},
+		{"GET", "/remove", a.RemoveToken},
 	})
 
 	a.addRoutes("/apis/v1", append(middlewares, validateTokenMiddleware(), testAPIMiddleware()), []route{

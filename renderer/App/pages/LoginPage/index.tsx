@@ -9,10 +9,6 @@ import { Icon } from "antd"
 
 import * as style from "./index.scss"
 
-interface ResponseToken {
-    token: string
-}
-
 interface ComponentProps {
 
 }
@@ -81,33 +77,6 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
         </Form>
         )
 
-        const LoginPanel = (
-        <Layout className={style.loginPanel}>
-            <Row style={divStyle}>
-                <Input
-                    placeholder={intl.get("enterUsername")}
-                    prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-                    suffix={suffix}
-                    value={username}
-                    onChange={this.onChangeUserName.bind(this)}
-                    ref={(node: Input) => this.userNameInput = node}
-                />
-            </Row>
-            <Row style={divStyle}>
-                <Input
-                    placeholder={intl.get("enterPassword")}
-                    prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-                    type="password"
-                    value={password}
-                    onChange={this.onChangePassword.bind(this)}
-                />
-            </Row>
-            <Row style={divStyle}>
-                <Button className={style.hahaStyle} type="primary" block onClick={this.LoginClick.bind(this)}>{intl.get("login")}</Button>
-            </Row>
-        </Layout>
-        )
-
         return (
         <Layout className={style.page}>
             <Layout.Content>
@@ -124,13 +93,8 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
     public async componentDidMount() {
         intl.init({ currentLocale: getLocale(), locales })
         .then(async () => {
-            const token = localStorage.getItem("jwtToken")
-            if (token !== null) {
-                const valid = await this.validateToken(token)
-                this.setState({...this.state, logined: valid, initDone: true})
-            } else {
-                this.setState({...this.state, logined: false, initDone: true})
-            }
+            const valid = await this.validateToken()
+            this.setState({...this.state, logined: valid, initDone: true})
         })
     }
 
@@ -139,45 +103,21 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
         this.setState({...this.state, username: "" })
     }
 
-    private LoginClick(e: MouseEvent<HTMLElement>) {
-        const user = {
-            username: this.state.username,
-            password: this.state.password,
-        }
-        axios.post("/token/new", user)
-        .then((response: AxiosResponse<ResponseToken>) => {
-            if (response.status === 200) {
-                localStorage.setItem("jwtToken", response.data.token)
-                this.setState({...this.state, logined: true})
-            }
-        })
-        .catch((err) => {
-            const ee = err as AxiosError
-            console.log(ee.response.data)
-        })
-
-        // fetch("apis/v1/boxes")
-        // .then((res) => {
-        //     if (res.status === 200) {
-        //         console.log(res)
-        //     }
-        // })
-        // .catch((err) => {
-        //     console.error(err)
-        // })
-    }
-
     private handleSubmit(e: React.FormEvent<HTMLElement>) {
         e.preventDefault()
         const user = {
             username: this.state.username,
             password: this.state.password,
         }
+        interface Response {
+            result: boolean
+        }
         axios.post("/token/new", user)
-        .then((response: AxiosResponse<ResponseToken>) => {
+        .then((response: AxiosResponse<Response>) => {
             if (response.status === 200) {
-                localStorage.setItem("jwtToken", response.data.token)
-                this.setState({...this.state, logined: true})
+                if (response.data.result) {
+                    this.setState({...this.state, logined: true})
+                }
             }
         })
         .catch((err) => {
@@ -186,13 +126,13 @@ class LoginPage extends Component<ComponentProps, ComponentState> {
         })
     }
 
-    private async validateToken(token: string): Promise<boolean> {
+    private async validateToken(): Promise<boolean> {
         interface Response {
-            validated: boolean
+            result: boolean
         }
         try {
-            const res = await axios.post<Response>("/token/test", {token})
-            return res.data.validated
+            const res = await axios.get<Response>("/token/test")
+            return res.data.result
         } catch (err) {
             const e = err as AxiosError
             console.log(e)

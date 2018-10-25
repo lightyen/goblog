@@ -2,25 +2,19 @@ package app
 
 import (
 	"fmt"
+	"goblog/app/auth"
+	"goblog/app/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
-
-	"goblog/app/auth"
-	"goblog/app/storage"
 )
 
 //GetUsers /apis/v1/boxes [GET]
-func (s *App) GetUsers(c *gin.Context) {
+func (a *App) GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": "hello world"})
 }
 
-type Token struct {
-	TokenString string `json:"token"`
-}
-
-func (s *App) NewToken(c *gin.Context) {
+func (a *App) NewToken(c *gin.Context) {
 
 	var user storage.User
 	err := c.BindJSON(&user)
@@ -37,37 +31,39 @@ func (s *App) NewToken(c *gin.Context) {
 	tokenString, err := auth.GenerateToken()
 
 	if err != nil {
-		c.Status(http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, &gin.H{"result": false})
 		fmt.Println("Error when signing the token")
 		return
 	}
 
-	response := Token{tokenString}
-	c.JSON(http.StatusOK, &response)
+	c.SetCookie(auth.CookieName, tokenString, auth.TimeoutSec+1, "/", "localhost", false, true)
+
+	c.JSON(http.StatusOK, &gin.H{
+		"result": true,
+	})
 }
 
-func (s *App) TestToken(c *gin.Context) {
-	var tokenRequest Token
+func (a *App) TestToken(c *gin.Context) {
 
-	var err error
-	err = c.BindJSON(&tokenRequest)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, nil)
-		fmt.Println("Error when test the token unmarshal")
-		return
-	}
+	tokenString, err := c.Cookie(auth.CookieName)
 
-	_, err = auth.ParseToken(tokenRequest.TokenString)
+	_, err = auth.ParseToken(tokenString)
 
 	if err != nil {
 		c.JSON(http.StatusOK, &gin.H{
-			"validated": false,
+			"result": false,
 		})
-		log.Printf("%s", err)
 		return
 	}
 
 	c.JSON(http.StatusOK, &gin.H{
-		"validated": true,
+		"result": true,
+	})
+}
+
+func (a *App) RemoveToken(c *gin.Context) {
+	c.SetCookie(auth.CookieName, "", 0, "/", "localhost", false, true)
+	c.JSON(http.StatusOK, &gin.H{
+		"result": true,
 	})
 }
