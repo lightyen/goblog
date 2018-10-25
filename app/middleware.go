@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"goblog/app/auth"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -10,8 +11,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-
-	"goblog/app/auth"
 )
 
 func recoverMiddleware() gin.HandlerFunc {

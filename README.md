@@ -6,7 +6,7 @@
 
 #### 安裝開發環境
 - vscode
-- golang (記得配置GOPATH)
+- golang (要配置GOPATH)
 - nodejs
 - yarn
 
@@ -83,8 +83,8 @@
 ## 想做還沒做的部份
 * 資料庫端(ex: mongodb)
 * 前端狀態統一管理(ex: redux)
-* 多國語言i18n(還在研究)
+* 國際化語言i18n
 
 ## 常用參考連結
-[golang](https://golang.org/doc/)
-[antd](https://ant.design/components/button/)
+* [golang](https://golang.org/doc/)
+* [antd](https://ant.design/components/button/)
